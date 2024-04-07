@@ -71,7 +71,11 @@ end
 function Panel:write(text)
 	self:modifiable(true)
 	local lines = { text }
-	api.nvim_buf_set_lines(self.buf_handle, -1, -1, true, lines)
+	if api.nvim_buf_is_valid(self.buf_handle) then
+		pcall(function()
+			api.nvim_buf_set_lines(self.buf_handle, -1, -1, true, lines)
+		end)
+	end
 	self:modifiable(false)
 	self:scrollToBottom()
 end
